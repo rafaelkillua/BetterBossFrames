@@ -1,0 +1,8 @@
+## Interface: 30300
+## Title: DK Skellies
+## Notes: Monitor skeleton pets for Death Knights with Undead Army perks on Synastria
+## Author: rafaelkillua
+## Version: 1.0.0
+## SavedVariables: DKSkelliesDB
+
+core.lua
