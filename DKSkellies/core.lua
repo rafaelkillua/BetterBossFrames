@@ -1,5 +1,12 @@
 -- DK Skellies - Monitora pets via BossFrame (polling OnUpdate)
 
+-- Verifica se o personagem é Death Knight
+local _, playerClass = UnitClass("player")
+if playerClass ~= "DEATHKNIGHT" then
+  DEFAULT_CHAT_FRAME:AddMessage("|cFFFF0000[DKSkellies]|r Inactive — Death Knight required.")
+  return
+end
+
 local MAX_BOSSES       = 6
 local BAR_WIDTH        = 160
 local BAR_HEIGHT       = 16
