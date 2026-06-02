@@ -1,6 +1,6 @@
-# DK Skellies
+# BetterBossFrames
 
-A World of Warcraft 3.3.5a (Wrath of the Lich King) addon that monitors boss-frame units (such as pets, ghouls, and skeletal minions) and displays them in a compact, draggable party-style frame.
+A World of Warcraft 3.3.5a (Wrath of the Lich King) addon that monitors boss-frame units (pets, ghouls, skeletal minions) and displays them in a compact, draggable party-style frame.
 
 Built for private server Synastria where certain pets are routed through the `BossTargetFrame` Blizzard UI, this addon provides a clean alternative — showing health, power, and click-to-target functionality without relying on the default boss target frames.
 
@@ -10,61 +10,61 @@ Built for private server Synastria where certain pets are routed through the `Bo
 - **Auto Show/Hide** — frame appears automatically when a pet is detected, hides when none are present
 - **Click to Target** — clicking a unit frame selects that unit (uses `SecureActionButtonTemplate` for combat safety)
 - **Health & Power Bars** — real-time health with percentage and color-coded power bars (Mana, Rage, Energy, Runic Power)
-- **Drag Handle** — draggable title bar with highlight effect
-- **Scale Control** — adjustable UI scale with persistence between sessions
-- **Blizzard Frame Toggle** — hides the default `BossXTargetFrame` frames; toggle with a command
+- **Drag Handle** — draggable title bar
+- **Scale Control** — adjustable UI scale via `/bbf scale` command
+- **Blizzard Frame Toggle** — hides the default `BossXTargetFrame` frames; toggle with `/bbf bossframes`
 - **Polling Engine** — uses an `OnUpdate` loop (0.1s) for reliability on private servers that may not fire unit events
 
 ## Commands
 
-All commands use `/dksk` (or `/dkskellies`):
+All commands use `/bbf` (or `/betterbossframes`):
 
 | Command | Description |
 |---|---|
-| `/dksk help` | Show all available commands |
-| `/dksk debug` | Toggle debug logging on/off (shows show/hide events in chat) |
-| `/dksk scale <0.3..3.0>` | Set the frame scale (saved between sessions) |
-| `/dksk bossframes` | Toggle Blizzard default boss target frames visible/hidden |
-| `/dksk reset` | Restore all settings to defaults |
+| `/bbf help` | Show all available commands |
+| `/bbf debug` | Toggle debug logging on/off |
+| `/bbf scale <0.3..3.0>` | Set the frame scale (saved between sessions) |
+| `/bbf bossframes` | Toggle Blizzard default boss target frames visible/hidden |
+| `/bbf reset` | Restore all settings to defaults |
 
 ## Layout
 
 ```
-┌────────────────────────────┐  ← "Skeletons" title bar (drag here)
-│ Warder of the Damned  [██]70%│  ← health bar with name + %
+┌────────────────────────────┐  ← title bar (drag here)
+│ Unit Name           [███]70%│  ← health bar with name + %
 │ ██████████████████████████ │  ← power bar (color-coded)
 ├────────────────────────────┤
-│ Ghoul                 [██]45%│
+│ Another Pet         [███]45%│
 │ █████████████████          │
 ├────────────────────────────┤
-│ ... (up to 6 pets)         │
+│ ... (up to 6 units)        │
 └────────────────────────────┘
 ```
 
 ## Installation
 
-1. Copy the `DKSkellies` folder into your WoW `Interface/AddOns/` directory:
+1. Copy the `BetterBossFrames` folder into your WoW `Interface/AddOns/` directory:
    ```
-   World of Warcraft/Interface/AddOns/DKSkellies/
+   World of Warcraft/Interface/AddOns/BetterBossFrames/
    ```
 2. Restart the game or reload with `/reload`
 3. Ensure the addon is enabled in the character selection screen
-4. The frame will auto-appear when pets are present; manually toggle Blizzard frames with `/dksk bossframes`
+4. The frame will auto-appear when pets are present; manually toggle Blizzard frames with `/bbf bossframes`
 
 ## Configuration
 
-All settings persist between sessions via `DKSkelliesDB` saved variables:
+All settings persist between sessions via `BetterBossFramesDB` saved variables:
 
 | Setting | Default | Description |
 |---|---|---|
-| `scale` | `1.0` | Frame UI scale |
+| `scale` | `1.0` | Frame UI scale (0.3 to 3.0) |
 | `hideBossFrames` | `true` | Hide default Blizzard boss target frames |
 
 ## Files
 
 | File | Purpose |
 |---|---|
-| `DKSkellies.toc` | Addon manifest (interface version, saved variables, file list) |
+| `BetterBossFrames.toc` | Addon manifest (interface version, saved variables, file list) |
 | `core.lua` | All addon logic (frames, polling, commands) |
 
 ## Interface Version
