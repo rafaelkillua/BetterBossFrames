@@ -277,8 +277,8 @@ local function HandleCommand(msg)
   end
 end
 
-SLASH_DKSKELLIES1 = "/bbf"
-SLASH_DKSKELLIES2 = "/betterbossframes"
+SLASH_BETTERBOSSFRAMES1 = "/bbf"
+SLASH_BETTERBOSSFRAMES2 = "/betterbossframes"
 SlashCmdList["BETTERBOSSFRAMES"] = HandleCommand
 
 -- Aplicar configurações salvas

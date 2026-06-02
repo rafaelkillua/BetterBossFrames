@@ -1,8 +1,8 @@
 ## Interface: 30300
 ## Title: BetterBossFrames
-## Notes: Monitor skeleton pets for Death Knights with Undead Army perks on Synastria
+## Notes: Monitor minions on Synastria
 ## Author: rafaelkillua
-## Version: 1.0.0
+## Version: 1.1
 ## SavedVariables: BetterBossFramesDB
 
 core.lua
