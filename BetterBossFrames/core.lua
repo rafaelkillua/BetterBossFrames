@@ -1,11 +1,11 @@
--- DK Skellies - Monitora pets via BossFrame (polling OnUpdate)
+-- BetterBossFrames by rafaelkillua
 
--- Verifica se o personagem é Death Knight
-local _, playerClass = UnitClass("player")
-if playerClass ~= "DEATHKNIGHT" then
-  DEFAULT_CHAT_FRAME:AddMessage("|cFFFF0000[DKSkellies]|r Inactive — Death Knight required.")
-  return
-end
+-- Verifica se o personagem é Death Knight ou Warlock
+-- local _, playerClass = UnitClass("player")
+-- if playerClass ~= "DEATHKNIGHT" and playerClass ~= "WARLOCK" then
+--   DEFAULT_CHAT_FRAME:AddMessage("|cFFFF0000[BetterBossFrames]|r Inactive — Death Knight or Warlock required.")
+--   return
+-- end
 
 local MAX_BOSSES       = 6
 local BAR_WIDTH        = 160
@@ -19,7 +19,7 @@ local UPDATE_THROTTLE  = 0.1
 local DEBUG            = false
 
 -- SavedVariables
-DKSkelliesDB           = DKSkelliesDB or { scale = 1.0, hideBossFrames = true }
+BetterBossFramesDB     = BetterBossFramesDB or { scale = 1.0, hideBossFrames = true }
 
 local function SetBossTargetFrames(hidden)
   for i = 1, MAX_BOSSES do
@@ -31,11 +31,11 @@ local function SetBossTargetFrames(hidden)
 end
 
 local function log(msg)
-  DEFAULT_CHAT_FRAME:AddMessage("|cFF00FF00[DKSkellies]|r " .. tostring(msg))
+  DEFAULT_CHAT_FRAME:AddMessage("|cFF00FF00[BetterBossFrames]|r " .. tostring(msg))
 end
 
 -- Container principal
-local container = CreateFrame("Frame", "DKSkelliesContainer", UIParent)
+local container = CreateFrame("Frame", "BetterBossFramesContainer", UIParent)
 container:SetWidth(BAR_WIDTH + 8)
 container:SetHeight(CONTAINER_HEIGHT)
 container:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
@@ -51,7 +51,7 @@ titleBar:SetPoint("TOP", container, "TOP", 0, 0)
 
 local titleText = titleBar:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 titleText:SetPoint("LEFT", titleBar, "LEFT", 0, 0)
-titleText:SetText("DKSkellies")
+titleText:SetText("Minions")
 titleText:SetTextColor(1, 0.3, 0.3, 1)
 
 titleBar:RegisterForDrag("LeftButton")
@@ -62,7 +62,7 @@ titleBar:SetScript("OnDragStop", function() container:StopMovingOrSizing() end)
 local members = {}
 
 for i = 1, MAX_BOSSES do
-  local btn = CreateFrame("Button", "DKSkelliesMember" .. i, container, "SecureActionButtonTemplate")
+  local btn = CreateFrame("Button", "BetterBossFramesMember" .. i, container, "SecureActionButtonTemplate")
   btn:SetWidth(BAR_WIDTH)
   btn:SetHeight(MEMBER_HEIGHT)
   btn:SetPoint("TOP", container, "TOP", 0, -TITLE_HEIGHT - ((i - 1) * MEMBER_HEIGHT))
@@ -210,7 +210,7 @@ local function UpdateAll()
     UpdateMember(btn)
   end
   UpdateContainerVisibility()
-  if DKSkelliesDB.hideBossFrames then
+  if BetterBossFramesDB.hideBossFrames then
     SetBossTargetFrames(true)
   end
 end
@@ -230,12 +230,12 @@ driver:SetScript("OnEvent", function(self, event)
   if event == "PLAYER_ENTERING_WORLD" then
     if DEBUG then log("PLAYER_ENTERING_WORLD") end
     self.elapsed = UPDATE_THROTTLE
-    SetBossTargetFrames(DKSkelliesDB.hideBossFrames)
+    SetBossTargetFrames(BetterBossFramesDB.hideBossFrames)
     UpdateAll()
   end
 end)
 
--- Comando unificado /dksk (ou /dkskellies)
+-- Comando unificado /bbd (ou /betterbossframes)
 local function HandleCommand(msg)
   local cmd, arg = strsplit(" ", msg or "", 2)
   cmd = (cmd or ""):lower()
@@ -246,45 +246,46 @@ local function HandleCommand(msg)
   elseif cmd == "scale" then
     local s = tonumber(arg)
     if s and s >= 0.3 and s <= 3.0 then
-      DKSkelliesDB.scale = s
+      BetterBossFramesDB.scale = s
       container:SetScale(s)
       log("Scale set to " .. string.format("%.1f", s))
     else
-      log("Usage: /dksk scale <0.3..3.0> | Current: " .. string.format("%.1f", DKSkelliesDB.scale))
+      log("Usage: /bbf scale <0.3..3.0> | Current: " .. string.format("%.1f", BetterBossFramesDB.scale))
     end
   elseif cmd == "bossframes" then
-    DKSkelliesDB.hideBossFrames = not DKSkelliesDB.hideBossFrames
-    SetBossTargetFrames(DKSkelliesDB.hideBossFrames)
-    log("Boss target frames " .. (DKSkelliesDB.hideBossFrames and "|cFFFF0000hidden|r" or "|cFF00FF00shown|r"))
+    BetterBossFramesDB.hideBossFrames = not BetterBossFramesDB.hideBossFrames
+    SetBossTargetFrames(BetterBossFramesDB.hideBossFrames)
+    log("Boss target frames " .. (BetterBossFramesDB.hideBossFrames and "|cFFFF0000hidden|r" or "|cFF00FF00shown|r"))
   elseif cmd == "reset" then
     DEBUG = false
-    DKSkelliesDB.scale = 1.0
-    DKSkelliesDB.hideBossFrames = true
+    BetterBossFramesDB.scale = 1.0
+    BetterBossFramesDB.hideBossFrames = true
     container:SetScale(1.0)
     SetBossTargetFrames(true)
     log("Settings restored to default |cFF00FF00(debug=off, scale=1.0, bossframes=hidden)|r")
   elseif cmd == "help" or cmd == "" then
-    log("|cFFFFFF00/dksk commands:|r")
+    log("|cFFFFFF00/bbf commands:|r")
     log("  |cFFAAAAAAdebug|r  - toggle debug log (" .. (DEBUG and "ON" or "OFF") .. ")")
-    log("  |cFFAAAAAAscale <n>|r - set scale (0.3 to 3.0, current " .. string.format("%.1f", DKSkelliesDB.scale) .. ")")
+    log("  |cFFAAAAAAscale <n>|r - set scale (0.3 to 3.0, current " ..
+      string.format("%.1f", BetterBossFramesDB.scale) .. ")")
     log("  |cFFAAAAAAbossframes|r - toggle Blizzard boss target frames (" ..
-      (DKSkelliesDB.hideBossFrames and "hidden" or "shown") .. ")")
+      (BetterBossFramesDB.hideBossFrames and "hidden" or "shown") .. ")")
     log("  |cFFAAAAAAreset|r  - restore defaults")
     log("  |cFFAAAAAAhelp|r   - this message")
   else
-    log("Unknown command: " .. cmd .. ". Use |cFFFFFF00/dksk help|r")
+    log("Unknown command: " .. cmd .. ". Use |cFFFFFF00/bbf help|r")
   end
 end
 
-SLASH_DKSKELLIES1 = "/dksk"
-SLASH_DKSKELLIES2 = "/dkskellies"
-SlashCmdList["DKSKELLIES"] = HandleCommand
+SLASH_DKSKELLIES1 = "/bbf"
+SLASH_DKSKELLIES2 = "/betterbossframes"
+SlashCmdList["BETTERBOSSFRAMES"] = HandleCommand
 
 -- Aplicar configurações salvas
-container:SetScale(DKSkelliesDB.scale)
-SetBossTargetFrames(DKSkelliesDB.hideBossFrames)
+container:SetScale(BetterBossFramesDB.scale)
+SetBossTargetFrames(BetterBossFramesDB.hideBossFrames)
 
 UpdateAll()
 log("Loaded |cFFFFFF00[scale " ..
-  string.format("%.1f", DKSkelliesDB.scale) ..
-  " bossframes " .. (DKSkelliesDB.hideBossFrames and "hidden" or "shown") .. "]|r /dksk help")
+  string.format("%.1f", BetterBossFramesDB.scale) ..
+  " bossframes " .. (BetterBossFramesDB.hideBossFrames and "hidden" or "shown") .. "]|r /bbf help")
