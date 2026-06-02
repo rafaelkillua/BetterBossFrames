@@ -2,7 +2,7 @@
 ## Title: BetterBossFrames
 ## Notes: Monitor minions on Synastria
 ## Author: rafaelkillua
-## Version: 1.1
+## Version: 1.2
 ## SavedVariables: BetterBossFramesDB
 
 core.lua
